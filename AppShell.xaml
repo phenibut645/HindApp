@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell
+    x:Class="HindApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:HindApp.Views"
+    Shell.FlyoutBehavior="Disabled">
+
+    <TabBar>
+        <ShellContent
+            Title="Поиск"
+            Icon="search.png"
+            ContentTemplate="{DataTemplate pages:ProductSearchPage}" 
+            Route="main" />
+
+        <ShellContent
+            Title="Избранное"
+            Icon="favorites.png"
+            ContentTemplate="{DataTemplate pages:FavoritesPage}" 
+            Route="favorites" />
+
+        <ShellContent
+            Title="Штрих-код"
+            Icon="barcode.png"
+            ContentTemplate="{DataTemplate pages:BarcodeScanPage}" 
+            Route="barcode" />
+    </TabBar>
+</Shell>

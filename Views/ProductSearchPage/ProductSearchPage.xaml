@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HindApp.Views.ProductSearchPage"
+             Title="Поиск продуктов">
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Entry x:Name="SearchEntry" Placeholder="Введите название продукта" />
+
+        <Entry x:Name="LimitEntry" Placeholder="Сколько продуктов найти" Keyboard="Numeric" />
+
+        <Button Text="Поиск" Clicked="OnSearchClicked" />
+
+        <CollectionView x:Name="ProductsList" SelectionMode="Single" SelectionChanged="OnProductSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="Gray" Padding="10" Margin="5">
+                        <Label Text="{Binding Name}" FontSize="16"/>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

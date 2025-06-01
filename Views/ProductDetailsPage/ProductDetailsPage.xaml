@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HindApp.Views.ProductDetailsPage"
+             Title="Детали продукта">
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Label x:Name="ProductTitle" FontSize="20" FontAttributes="Bold"/>
+
+        <HorizontalStackLayout>
+            <Label Text="Сортировать по цене ↑" />
+            <CheckBox x:Name="SortCheckBox" CheckedChanged="OnSortChanged"/>
+        </HorizontalStackLayout>
+
+        <CollectionView x:Name="PriceList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BorderColor="LightGray">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding StoreName}" FontAttributes="Bold"/>
+                            <Label Text="{Binding Price, StringFormat='Цена: {0} €'}"/>
+                            <Label Text="{Binding LastUpdated, StringFormat='Обновлено: {0:dd.MM.yyyy HH:mm}'}"
+                                   FontSize="10" TextColor="Gray"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

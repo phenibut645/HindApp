@@ -1,0 +1,97 @@
+﻿-- 1. Пользователи
+CREATE TABLE Users (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Username TEXT NOT NULL UNIQUE,
+    PasswordHash TEXT NOT NULL,
+    IsAdmin INTEGER NOT NULL DEFAULT 0 -- 1 = админ, 0 = обычный пользователь
+);
+
+-- 2. Продукты
+CREATE TABLE Products (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Description TEXT,
+    Category TEXT
+);
+
+-- 3. Магазины
+CREATE TABLE Stores (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Location TEXT -- можно расширить до широта/долгота или адреса
+);
+
+-- 4. Цены продуктов в магазинах
+CREATE TABLE ProductPrices (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ProductId INTEGER NOT NULL,
+    StoreId INTEGER NOT NULL,
+    Price REAL NOT NULL,
+    LastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ProductId) REFERENCES Products(Id),
+    FOREIGN KEY (StoreId) REFERENCES Stores(Id)
+);
+
+-- 5. Избранные товары пользователей
+CREATE TABLE Favorites (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserId INTEGER NOT NULL,
+    ProductId INTEGER NOT NULL,
+    AddedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (ProductId) REFERENCES Products(Id),
+    UNIQUE(UserId, ProductId) -- чтобы один пользователь не добавил один товар дважды
+);
+
+-- 6. Штрихкоды (опционально)
+CREATE TABLE Barcodes (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ProductId INTEGER NOT NULL,
+    Barcode TEXT NOT NULL UNIQUE,
+    FOREIGN KEY (ProductId) REFERENCES Products(Id)
+);
+
+-- 7. Изображения продуктов
+CREATE TABLE ProductImages (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ProductId INTEGER NOT NULL,
+    ImageUrl TEXT NOT NULL,
+    Caption TEXT,
+    FOREIGN KEY (ProductId) REFERENCES Products(Id)
+);
+
+-- 8. Отзывы и оценки
+CREATE TABLE ProductRatings (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ProductId INTEGER NOT NULL,
+    UserId INTEGER NOT NULL,
+    Rating INTEGER CHECK(Rating >= 1 AND Rating <= 5),
+    Comment TEXT,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ProductId) REFERENCES Products(Id),
+    FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+
+-- 9. Наличие товара (инвентарь)
+CREATE TABLE Inventory (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    StoreId INTEGER NOT NULL,
+    ProductId INTEGER NOT NULL,
+    Quantity INTEGER DEFAULT 0,
+    LastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (StoreId) REFERENCES Stores(Id),
+    FOREIGN KEY (ProductId) REFERENCES Products(Id),
+    UNIQUE(StoreId, ProductId)
+);
+
+-- 10. История изменения цен
+CREATE TABLE PriceHistory (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ProductId INTEGER NOT NULL,
+    StoreId INTEGER NOT NULL,
+    OldPrice REAL NOT NULL,
+    NewPrice REAL NOT NULL,
+    ChangedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ProductId) REFERENCES Products(Id),
+    FOREIGN KEY (StoreId) REFERENCES Stores(Id)
+);
