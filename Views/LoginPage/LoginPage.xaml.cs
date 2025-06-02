@@ -1,4 +1,4 @@
-using HindApp.Services;
+п»їusing HindApp.Services;
 using Microsoft.Maui.Controls;
 
 namespace HindApp.Views
@@ -20,11 +20,11 @@ namespace HindApp.Views
 
             //if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             //{
-            //    await DisplayAlert("Ошибка", "Введите имя пользователя и пароль", "OK");
+            //    await DisplayAlert("ГЋГёГЁГЎГЄГ ", "Г‚ГўГҐГ¤ГЁГІГҐ ГЁГ¬Гї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГЁ ГЇГ Г°Г®Г«Гј", "OK");
             //    return;
             //}
 
-            //// Здесь может быть проверка пользователя из БД
+            //// Г‡Г¤ГҐГ±Гј Г¬Г®Г¦ГҐГІ ГЎГ»ГІГј ГЇГ°Г®ГўГҐГ°ГЄГ  ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГЁГ§ ГЃГ„
             //var conn = _databaseService.GetConnection();
             //var users = await conn.Table<Models.User>()
             //                      .Where(u => u.Username == username && u.PasswordHash == password)
@@ -32,12 +32,12 @@ namespace HindApp.Views
 
             //if (users.Count > 0)
             //{
-            //    // успешный вход
+            //    // ГіГ±ГЇГҐГёГ­Г»Г© ГўГµГ®Г¤
             //    await Shell.Current.GoToAsync("//main");
             //}
             //else
             //{
-            //    await DisplayAlert("Ошибка", "Неверные данные", "OK");
+            //    await DisplayAlert("ГЋГёГЁГЎГЄГ ", "ГЌГҐГўГҐГ°Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ", "OK");
             //}
             await Shell.Current.GoToAsync("//main");
         }

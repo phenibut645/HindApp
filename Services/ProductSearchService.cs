@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HindApp.Models;
+using System.Diagnostics;
 
 namespace HindApp.Services
-{ 
+{
     public class ProductSearchService
     {
         private readonly SQLiteAsyncConnection _db;
@@ -29,13 +30,11 @@ namespace HindApp.Services
 
             query = query.Trim().ToLower();
 
-            // Получаем все продукты, содержащие запрос
-            var allMatches = await _db.Table<Product>()
-                .Where(p => p.Name.ToLower().Contains(query))
-                .ToListAsync();
+            // Грузим все продукты — в реальности можно ограничить (если их очень много)
+            var allProducts = await _db.Table<Product>().ToListAsync();
 
-            // Сортировка: сначала точные вхождения, затем по индексу в названии
-            var sorted = allMatches
+            var matches = allProducts
+                .Where(p => p.Name.ToLower().Contains(query))
                 .OrderBy(p =>
                 {
                     var index = p.Name.ToLower().IndexOf(query);
@@ -45,7 +44,9 @@ namespace HindApp.Services
                 .Take(limit)
                 .ToList();
 
-            return sorted;
+            return matches;
         }
+
     }
+
 }

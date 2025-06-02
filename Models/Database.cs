@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SQLite;
+﻿using SQLite;
+using System;
 
 namespace HindApp.Models
 {
-
-
+    [Table("Users")]
     public class User
     {
         [PrimaryKey, AutoIncrement]
@@ -21,9 +16,20 @@ namespace HindApp.Models
         public string PasswordHash { get; set; }
 
         [NotNull]
-        public int IsAdmin { get; set; } = 0;
+        public int IsAdmin { get; set; } = 0; // 1 = админ, 0 = пользователь
     }
 
+    [Table("Category")]
+    public class Category
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+
+        [NotNull]
+        public string Name { get; set; }
+    }
+
+    [Table("Products")]
     public class Product
     {
         [PrimaryKey, AutoIncrement]
@@ -34,9 +40,10 @@ namespace HindApp.Models
 
         public string Description { get; set; }
 
-        public string Category { get; set; }
+        public int? CategoryId { get; set; }
     }
 
+    [Table("Stores")] 
     public class Store
     {
         [PrimaryKey, AutoIncrement]
@@ -48,15 +55,16 @@ namespace HindApp.Models
         public string Location { get; set; }
     }
 
+    [Table("ProductPrices")]
     public class ProductPrice
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int ProductId { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int StoreId { get; set; }
 
         [NotNull]
@@ -65,38 +73,41 @@ namespace HindApp.Models
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     }
 
+    [Table("Favorites")]
     public class Favorite
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int UserId { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int ProductId { get; set; }
 
         public DateTime AddedAt { get; set; } = DateTime.UtcNow;
     }
 
+    [Table("Barcodes")]
     public class Barcode
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int ProductId { get; set; }
 
         [Unique, NotNull]
         public string BarcodeValue { get; set; }
     }
 
+    [Table("ProductImages")]
     public class ProductImage
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int ProductId { get; set; }
 
         [NotNull]
@@ -105,33 +116,36 @@ namespace HindApp.Models
         public string Caption { get; set; }
     }
 
+    [Table("ProductRatings")]
     public class ProductRating
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int ProductId { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int UserId { get; set; }
 
-        public int Rating { get; set; } // 1–5
+        [NotNull]
+        public int Rating { get; set; } // 1-5
 
         public string Comment { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
+    [Table("Inventory")]
     public class Inventory
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int StoreId { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int ProductId { get; set; }
 
         public int Quantity { get; set; } = 0;
@@ -139,15 +153,16 @@ namespace HindApp.Models
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     }
 
+    [Table("PriceHistory")]
     public class PriceHistory
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int ProductId { get; set; }
 
-        [Indexed, NotNull]
+        [NotNull]
         public int StoreId { get; set; }
 
         [NotNull]

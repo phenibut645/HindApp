@@ -6,12 +6,18 @@ CREATE TABLE Users (
     IsAdmin INTEGER NOT NULL DEFAULT 0 -- 1 = админ, 0 = обычный пользователь
 );
 
+CREATE TABLE Categories(
+    Id INTEGER PRIMARY KEY AUTOINREMENT,
+    Name TEXT NOT NULL
+    );
+
 -- 2. Продукты
 CREATE TABLE Products (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     Name TEXT NOT NULL,
     Description TEXT,
-    Category TEXT
+    CategoryId INTEGER,
+    FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
 );
 
 -- 3. Магазины
