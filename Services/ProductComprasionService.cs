@@ -16,16 +16,10 @@ namespace HindApp.Services
             _db = db;
         }
 
-        /// <summary>
-        /// Получить цены на продукт во всех магазинах с сортировкой по цене.
-        /// </summary>
-        /// <param name="productId">ID продукта</param>
-        /// <param name="ascending">true — сортировка от дешевых к дорогим, false — наоборот</param>
-        /// <returns>Список цен продукта по магазинам</returns>
         public async Task<List<ProductPriceInfo>> GetProductPricesAsync(int productId, bool ascending)
         {
             var prices = await _db.QueryAsync<ProductPriceWithStore>(
-                @"SELECT ProductPrices.Price, ProductPrices.LastUpdated, Stores.Name AS StoreName
+                @"SELECT ProductPrices.Id, ProductPrices.Price, ProductPrices.LastUpdated, Stores.Name AS StoreName
                   FROM ProductPrices
                   JOIN Stores ON Stores.Id = ProductPrices.StoreId
                   WHERE ProductPrices.ProductId = ?",
@@ -37,6 +31,7 @@ namespace HindApp.Services
                 : prices.OrderByDescending(p => p.Price))
                 .Select(p => new ProductPriceInfo
                 {
+                    Id = p.Id,
                     StoreName = p.StoreName,
                     Price = p.Price,
                     LastUpdated = p.LastUpdated
@@ -46,6 +41,7 @@ namespace HindApp.Services
 
         private class ProductPriceWithStore
         {
+            public int Id { get; set; }
             public double Price { get; set; }
             public DateTime LastUpdated { get; set; }
             public string StoreName { get; set; }

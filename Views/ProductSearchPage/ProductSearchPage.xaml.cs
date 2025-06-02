@@ -8,37 +8,50 @@ public partial class ProductSearchPage : ContentPage
 {
     private readonly ProductSearchService _searchService;
     private readonly DatabaseService _databaseService;
+    private readonly NavigationDataService _navigationDataService;
 
-    public ProductSearchPage(DatabaseService databaseService)
+    public ProductSearchPage(DatabaseService databaseService, NavigationDataService navigationDataService)
     {
         InitializeComponent();
         _databaseService = databaseService;
         _searchService = new ProductSearchService(_databaseService.GetConnection());
+        _navigationDataService = navigationDataService;
     }
 
     private async void OnSearchClicked(object sender, EventArgs e)
     {
-        var query = SearchEntry.Text?.Trim() ?? "";
-        int limit = int.TryParse(LimitEntry.Text, out var l) ? l : 10;
-        
-        var results = await _searchService.SearchProductsAsync(query, limit);
-        Debug.WriteLine("==============Result===============");
-        foreach(var result in results)
-        {
-            Debug.WriteLine(result.Name);
-        }
-        Debug.WriteLine("===================================");
-        ProductsList.ItemsSource = results;
+        var query = SearchEntry.Text;
+        int limit = int.TryParse(LimitEntry.Text, out var l) ? l : 50;
+        var selectedCategory = CategoryPicker.SelectedItem as Category;
+        int? categoryId = selectedCategory?.Id;
 
-        List<Product> products = await _databaseService.GetAllProductsAsync();
+        var results = await _searchService.SearchProductsAsync(query, limit, categoryId);
+        ProductsList.ItemsSource = results;
     }
+
 
     private async void OnProductSelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is Product selectedProduct)
         {
-            await Navigation.PushAsync(new ProductDetailsPage(selectedProduct, _databaseService));
+            _navigationDataService.SelectedProduct = selectedProduct;
+            try
+            {
+                await Shell.Current.GoToAsync("ProductDetailsPage");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Navigation error: {ex.Message}", "OK");
+            }
             ProductsList.SelectedItem = null;
         }
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        var categories = await _databaseService.GetAllCategoriesAsync();
+        CategoryPicker.ItemsSource = categories;
+    }
+
 }

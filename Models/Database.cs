@@ -16,7 +16,7 @@ namespace HindApp.Models
         public string PasswordHash { get; set; }
 
         [NotNull]
-        public int IsAdmin { get; set; } = 0; // 1 = админ, 0 = пользователь
+        public int IsAdmin { get; set; } = 0;
     }
 
     [Table("Category")]
@@ -83,7 +83,7 @@ namespace HindApp.Models
         public int UserId { get; set; }
 
         [NotNull]
-        public int ProductId { get; set; }
+        public int ProductPricesId  { get; set; }
 
         public DateTime AddedAt { get; set; } = DateTime.UtcNow;
     }
@@ -129,7 +129,7 @@ namespace HindApp.Models
         public int UserId { get; set; }
 
         [NotNull]
-        public int Rating { get; set; } // 1-5
+        public int Rating { get; set; }
 
         public string Comment { get; set; }
 

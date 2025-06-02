@@ -8,21 +8,26 @@
 
     <TabBar>
         <ShellContent
-            Title="Поиск"
+            Title="Otsimine"
             Icon="search.png"
             ContentTemplate="{DataTemplate pages:ProductSearchPage}" 
             Route="main" />
 
         <ShellContent
-            Title="Избранное"
+            Title="Valitud"
             Icon="favorites.png"
             ContentTemplate="{DataTemplate pages:FavoritesPage}" 
             Route="favorites" />
 
         <ShellContent
-            Title="Штрих-код"
+            Title="Triipkood"
             Icon="barcode.png"
-            ContentTemplate="{DataTemplate pages:BarcodeScanPage}" 
+            ContentTemplate="{DataTemplate pages:BarcodeScannerPage}" 
             Route="barcode" />
+        <ShellContent
+            Title="Väljapääs"
+            Icon="logout.png"
+            ContentTemplate="{DataTemplate pages:LogoutPage}" 
+            Route="logout" />
     </TabBar>
 </Shell>

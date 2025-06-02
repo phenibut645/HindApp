@@ -3,14 +3,14 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="HindApp.Views.LoginView"
-    Title="Вход">
+    Title="Sissepääs">
 
     <VerticalStackLayout Padding="30" Spacing="20">
-        <Label Text="Вход в приложение" FontSize="24" HorizontalOptions="Center" />
+        <Label Text="Sissepääs rakendusse" FontSize="24" HorizontalOptions="Center" />
 
-        <Entry x:Name="UsernameEntry" Placeholder="Имя пользователя" />
-        <Entry x:Name="PasswordEntry" Placeholder="Пароль" IsPassword="True" />
+        <Entry x:Name="UsernameEntry" Placeholder="Kasutajanimi" />
+        <Entry x:Name="PasswordEntry" Placeholder="Parool" IsPassword="True" />
 
-        <Button Text="Войти" Clicked="OnLoginClicked" />
+        <Button Text="Sisene" Clicked="OnLoginClicked" />
     </VerticalStackLayout>
 </ContentPage>

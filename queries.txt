@@ -42,11 +42,11 @@ CREATE TABLE ProductPrices (
 CREATE TABLE Favorites (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     UserId INTEGER NOT NULL,
-    ProductId INTEGER NOT NULL,
+    ProductPricesId INTEGER NOT NULL,
     AddedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (UserId) REFERENCES Users(Id),
-    FOREIGN KEY (ProductId) REFERENCES Products(Id),
-    UNIQUE(UserId, ProductId) -- чтобы один пользователь не добавил один товар дважды
+    FOREIGN KEY (ProductPricesId) REFERENCES ProductPrices(Id),
+    UNIQUE(UserId, ProductPrices) -- чтобы один пользователь не добавил один товар дважды
 );
 
 -- 6. Штрихкоды (опционально)

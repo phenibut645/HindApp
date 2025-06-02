@@ -1,5 +1,5 @@
-﻿using SQLite;
-using HindApp.Models;
+﻿using HindApp.Models;
+using SQLite;
 using System.Diagnostics;
 
 public class DatabaseService
@@ -12,6 +12,8 @@ public class DatabaseService
         EnableForeignKeys();
     }
 
+
+
     public async Task InitializeAsync()
     {
         var result = await _connection.ExecuteScalarAsync<int>(
@@ -19,7 +21,7 @@ public class DatabaseService
 
         if (result == 0)
         {
-            // Создание всех таблиц вручную
+
             string createScript = @"
             -- 1. Пользователи
 CREATE TABLE Users (
@@ -65,11 +67,11 @@ CREATE TABLE ProductPrices (
 CREATE TABLE Favorites (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     UserId INTEGER NOT NULL,
-    ProductId INTEGER NOT NULL,
+    ProductPricesId INTEGER NOT NULL,
     AddedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (UserId) REFERENCES Users(Id),
-    FOREIGN KEY (ProductId) REFERENCES Products(Id),
-    UNIQUE(UserId, ProductId) -- чтобы один пользователь не добавил один товар дважды
+    FOREIGN KEY (ProductPricesId) REFERENCES ProductPrices(Id),
+    UNIQUE(UserId, ProductPricesId) -- чтобы один пользователь не добавил один товар дважды
 );
 
 -- 6. Штрихкоды (опционально)
@@ -137,55 +139,55 @@ CREATE TABLE PriceHistory (
             }
         }
 
-        await SeedAsync(); // Добавляем вызов
+        await SeedAsync();
     }
+
+
 
     private async void EnableForeignKeys()
     {
         await _connection.ExecuteAsync("PRAGMA foreign_keys = ON;");
     }
 
+
     private async Task SeedAsync()
     {
-        // Проверим, есть ли уже магазины
         var existingStores = await _connection.Table<Store>().ToListAsync();
-        if (existingStores.Any()) return; // Уже есть данные — выходим
+        if (existingStores.Any()) return;
 
-        // Магазины
         var stores = new List<Store>
         {
-            new Store { Name = "Магнит", Location = "Москва, ул. Ленина, 10" },
-            new Store { Name = "Пятёрочка", Location = "Санкт-Петербург, Невский проспект, 24" },
-            new Store { Name = "Лента", Location = "Новосибирск, ул. Фрунзе, 51" },
-            new Store { Name = "О’Кей", Location = "Екатеринбург, ул. Мира, 12" },
-            new Store { Name = "Ашан", Location = "Казань, проспект Победы, 98" }
+            new Store { Name = "Rimi", Location = "Tallinn, Estonia" },
+            new Store { Name = "Selver", Location = "Tallinn, Estonia" },
+            new Store { Name = "Prisma", Location = "Helsinki, Finland" },
+            new Store { Name = "Maxima", Location = "Vilnius, Lithuania" },
+            new Store { Name = "Solaris", Location = "Tallinn, Estonia" },
         };
 
         var categories = new List<Category>
         {
-            new Category { Name = "Молочные продукты" },
-            new Category { Name = "Хлеб и выпечка" },
-            new Category { Name = "Бакалея" },
-            new Category { Name = "Яйца и молочные продукты" },
-            new Category { Name = "Масла и жиры" },
-            new Category { Name = "Мясо и птица" },
-            new Category { Name = "Овощи и фрукты" },
-            new Category { Name = "Сладости" },
+            new Category { Name = "Piimatooted" },
+            new Category { Name = "Leib ja sai" },
+            new Category { Name = "Kuivained" },
+            new Category { Name = "Munad ja piimatooted" },
+            new Category { Name = "Õlid ja rasvad" },
+            new Category { Name = "Liha ja linnuliha" },
+            new Category { Name = "Köögiviljad ja puuviljad" },
+            new Category { Name = "Maiustused" },
         };
 
-        // Продукты
         var products = new List<Product>
         {
-            new Product { Name = "Молоко 3.2% 1л", Description = "Пастеризованное молоко в пакете", CategoryId = 1 },
-            new Product { Name = "Хлеб пшеничный", Description = "Свежий хлеб из пшеничной муки", CategoryId = 2 },
-            new Product { Name = "Яйца куриные 10 шт", Description = "Яйца первой категории", CategoryId = 4 },
-            new Product { Name = "Макароны рожки 500г", Description = "Макароны из твердых сортов пшеницы", CategoryId = 3 },
-            new Product { Name = "Сахар 1 кг", Description = "Сахар-песок фасованный", CategoryId = 3 },
-            new Product { Name = "Масло подсолнечное 1л", Description = "Рафинированное масло без запаха", CategoryId = 5 },
-            new Product { Name = "Куриное филе 1 кг", Description = "Охлаждённое куриное филе", CategoryId = 6 },
-            new Product { Name = "Картофель 1 кг", Description = "Свежий картофель, урожай 2024 года", CategoryId = 7 },
-            new Product { Name = "Яблоки красные 1 кг", Description = "Яблоки сорта \"Гала\"", CategoryId = 7 },
-            new Product { Name = "Шоколад молочный 90г", Description = "Классический молочный шоколад", CategoryId = 8 }
+            new Product { Name = "Piim 3.2% 1l", Description = "Pastöriseeritud piim pakendis", CategoryId = 1 },
+            new Product { Name = "Nisuleib", Description = "Värske nisujahust leib", CategoryId = 2 },
+            new Product { Name = "Kanamunad 10 tk", Description = "Esimese kategooria munad", CategoryId = 4 },
+            new Product { Name = "Makaronid torukesed 500g", Description = "Kõrgekvaliteedilisest nisust makaronid", CategoryId = 3 },
+            new Product { Name = "Suhkur 1 kg", Description = "Pakendatud suhkur", CategoryId = 3 },
+            new Product { Name = "Päevalilleõli 1l", Description = "Lõhnatu rafineeritud õli", CategoryId = 5 },
+            new Product { Name = "Kanafilee 1 kg", Description = "Jahutatud kanafilee", CategoryId = 6 },
+            new Product { Name = "Kartul 1 kg", Description = "Värske kartul, 2024. aasta saak", CategoryId = 7 },
+            new Product { Name = "Punased õunad 1 kg", Description = "\"Gala\" sort õunad", CategoryId = 7 },
+            new Product { Name = "Piimašokolaad 90g", Description = "Klassikaline piimašokolaad", CategoryId = 8 }
         };
 
         var productPrices = new List<ProductPrice>
@@ -205,13 +207,19 @@ CREATE TABLE PriceHistory (
             new ProductPrice { LastUpdated = new DateTime(2025, 5, 15), Price = 2.17, ProductId = 6, StoreId = 5 },
         };
 
-        // Сохраняем в базу
+        var users = new List<User>
+        {
+            new User { IsAdmin = 1, PasswordHash = "space", Username = "root" },
+            new User { IsAdmin = 0, PasswordHash = "space", Username = "user" }
+        };
+
         try
         {
             await _connection.InsertAllAsync(stores);
             await _connection.InsertAllAsync(categories);
             await _connection.InsertAllAsync(products);
             await _connection.InsertAllAsync(productPrices);
+            await _connection.InsertAllAsync(users);
         }
         catch(SQLite.SQLiteException e)
         {
@@ -219,10 +227,117 @@ CREATE TABLE PriceHistory (
         }
         
     }
+
+    public Task<List<Category>> GetAllCategoriesAsync()
+    {
+        return _connection.Table<Category>().ToListAsync();
+    }
+
+
     public async Task<List<Product>> GetAllProductsAsync()
     {
         return await _connection.Table<Product>().ToListAsync();
     }
 
     public SQLiteAsyncConnection GetConnection() => _connection;
+
+    public async Task<User?> GetUserByUsernameAndPasswordAsync(string username, string password)
+    {
+        return await _connection.Table<User>()
+            .Where(u => u.Username == username && u.PasswordHash == password)
+            .FirstOrDefaultAsync();
+    }
+
+    public Task<int> AddProductAsync(Product product)
+    {
+        return _connection.InsertAsync(product);
+    }
+
+    public Task<int> UpdateProductAsync(Product product)
+    {
+        return _connection.UpdateAsync(product);
+    }
+
+    public Task<int> DeleteProductAsync(Product product)
+    {
+        return _connection.DeleteAsync(product);
+    }
+
+    public async Task<List<Store>> GetAllStoresAsync()
+    {
+        return await _connection.Table<Store>().ToListAsync();
+    }
+    public Task<int> AddStoreAsync(Store store)
+    {
+        return _connection.InsertAsync(store);
+    }
+
+    public Task<int> UpdateStoreAsync(Store store)
+    {
+        return _connection.UpdateAsync(store);
+    }
+
+    public Task<int> DeleteStoreAsync(Store store)
+    {
+        return _connection.DeleteAsync(store);
+    }
+    public async Task<List<ProductPrice>> GetStoreProductPricesAsync(int storeId)
+    {
+        var connection = GetConnection();
+        return await connection.Table<ProductPrice>()
+            .Where(pp => pp.StoreId == storeId)
+            .ToListAsync();
+    }
+
+    public async Task AddOrUpdateProductPriceAsync(ProductPrice productPrice)
+    {
+        var connection = GetConnection();
+
+        var existing = await connection.Table<ProductPrice>()
+            .Where(pp => pp.ProductId == productPrice.ProductId && pp.StoreId == productPrice.StoreId)
+            .FirstOrDefaultAsync();
+
+        if (existing != null)
+        {
+            existing.Price = productPrice.Price;
+            existing.LastUpdated = DateTime.Now;
+            await connection.UpdateAsync(existing);
+        }
+        else
+        {
+            productPrice.LastUpdated = DateTime.Now;
+            await connection.InsertAsync(productPrice);
+        }
+    }
+
+    public async Task DeleteProductPriceAsync(int productPriceId)
+    {
+        var connection = GetConnection();
+        var pp = await connection.FindAsync<ProductPrice>(productPriceId);
+        if (pp != null)
+        {
+            await connection.DeleteAsync(pp);
+        }
+    }
+
+
+   
+    public Task AddCategoryAsync(Category category)
+    {
+        return _connection.InsertAsync(category);
+    }
+
+    
+    public Task UpdateCategoryAsync(Category category)
+    {
+        return _connection.UpdateAsync(category);
+    }
+
+    
+    public Task DeleteCategoryAsync(int categoryId)
+    {
+        return _connection.DeleteAsync<Category>(categoryId);
+    }
+
+
 }

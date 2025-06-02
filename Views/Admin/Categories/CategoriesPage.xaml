@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HindApp.Views.Admin.CategoriesPage"
+             Title="Kategooriad">
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Label Text="Kategooriate nimekiri" FontSize="20" FontAttributes="Bold" />
+
+        <CollectionView x:Name="CategoriesList"
+                        SelectionMode="Single"
+                        SelectionChanged="OnCategorySelected"
+                        HeightRequest="250">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" Margin="5" BackgroundColor="Transparent">
+                        <Label Text="{Binding Name}" FontSize="16" VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Entry x:Name="CategoryNameEntry" Placeholder="Kategooria nimi" />
+
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Lisa" Clicked="OnAddCategoryClicked" />
+            <Button Text="Salvesta" Clicked="OnSaveCategoryClicked" IsEnabled="False" x:Name="SaveButton" />
+            <Button Text="Kustuta" Clicked="OnDeleteCategoryClicked" IsEnabled="False" x:Name="DeleteButton" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+</ContentPage>

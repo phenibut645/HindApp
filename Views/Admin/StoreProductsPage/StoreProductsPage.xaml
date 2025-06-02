@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HindApp.Views.Admin.StoreProductsPage"
+             Title="Kaupluse tooted">
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Label x:Name="StoreTitle" FontSize="20" FontAttributes="Bold" />
+
+        <Picker x:Name="ProductPicker" Title="Vali toode" />
+        <Entry x:Name="PriceEntry" Keyboard="Numeric" Placeholder="Sisesta hind (nt 1.99)" />
+        <Button Text="Lisa toode poodi" Clicked="OnAddProductToStoreClicked" />
+
+        <CollectionView x:Name="StoreProductList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="LightGray" Padding="10" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding ProductName}" FontAttributes="Bold" />
+                            <Label Text="{Binding Price, StringFormat='Hind: {0} €'}" />
+                            <Label Text="{Binding LastUpdated, StringFormat='Uuendatud: {0:dd.MM.yyyy HH:mm}'}"
+                                   FontSize="10" TextColor="Gray" />
+                            <Button Text="Eemalda poest" Clicked="OnRemoveProductClicked" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

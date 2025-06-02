@@ -2,13 +2,20 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HindApp.Views.ProductDetailsPage"
-             Title="Детали продукта">
+             Title="Toote detailid"
+             xmlns:local="clr-namespace:HindApp.Views">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:FavoriteTextConverter x:Key="FavoriteTextConverter" />
+            <local:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <VerticalStackLayout Padding="20" Spacing="10">
         <Label x:Name="ProductTitle" FontSize="20" FontAttributes="Bold"/>
 
         <HorizontalStackLayout>
-            <Label Text="Сортировать по цене ↑" />
+            <Label Text="Sorteeri hinna järgi ↑" />
             <CheckBox x:Name="SortCheckBox" CheckedChanged="OnSortChanged"/>
         </HorizontalStackLayout>
 
@@ -18,13 +25,20 @@
                     <Frame Padding="10" Margin="5" BorderColor="LightGray">
                         <VerticalStackLayout>
                             <Label Text="{Binding StoreName}" FontAttributes="Bold"/>
-                            <Label Text="{Binding Price, StringFormat='Цена: {0} €'}"/>
-                            <Label Text="{Binding LastUpdated, StringFormat='Обновлено: {0:dd.MM.yyyy HH:mm}'}"
-                                   FontSize="10" TextColor="Gray"/>
+                            <Label Text="{Binding Price, StringFormat='Hind: {0} €'}"/>
+                            <Label Text="{Binding LastUpdated, StringFormat='Uuendatud: {0:dd.MM.yyyy HH:mm}'}"
+                           FontSize="10" TextColor="Gray"/>
+
+                            <Button Text="{Binding IsFavorite, Converter={StaticResource FavoriteTextConverter}}"
+                            Clicked="OnAddToFavoritesClicked"
+                            CommandParameter="{Binding .}"
+                            IsEnabled="{Binding IsFavorite, Converter={StaticResource InverseBoolConverter}}"/>
+
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>

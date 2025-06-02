@@ -6,40 +6,46 @@ namespace HindApp.Views
     public partial class LoginView : ContentPage
     {
         private readonly DatabaseService _databaseService;
+        private readonly SessionService _sessionService;
+        private readonly IServiceProvider _services;
 
-        public LoginView(DatabaseService databaseService)
+        public LoginView(DatabaseService databaseService, SessionService sessionService, IServiceProvider services)
         {
             InitializeComponent();
             _databaseService = databaseService;
+            _sessionService = sessionService;
+            _services = services;
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
-            //string username = UsernameEntry.Text?.Trim();
-            //string password = PasswordEntry.Text;
+            string username = UsernameEntry.Text.Trim();
+            string password = PasswordEntry.Text.Trim();
 
-            //if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            //{
-            //    await DisplayAlert("Îøèáêà", "Ââåäèòå èìÿ ïîëüçîâàòåëÿ è ïàðîëü", "OK");
-            //    return;
-            //}
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                await DisplayAlert("Viga", "Sisesta kasutajanimi ja parool.", "OK");
+                return;
+            }
 
-            //// Çäåñü ìîæåò áûòü ïðîâåðêà ïîëüçîâàòåëÿ èç ÁÄ
-            //var conn = _databaseService.GetConnection();
-            //var users = await conn.Table<Models.User>()
-            //                      .Where(u => u.Username == username && u.PasswordHash == password)
-            //                      .ToListAsync();
+            var user = await _databaseService.GetUserByUsernameAndPasswordAsync(username, password);
 
-            //if (users.Count > 0)
-            //{
-            //    // óñïåøíûé âõîä
-            //    await Shell.Current.GoToAsync("//main");
-            //}
-            //else
-            //{
-            //    await DisplayAlert("Îøèáêà", "Íåâåðíûå äàííûå", "OK");
-            //}
-            await Shell.Current.GoToAsync("//main");
+            if (user == null)
+            {
+                await DisplayAlert("Viga", "Vale kasutajanimi või parool.", "OK");
+                return;
+            }
+
+            _sessionService.SetUser(user);
+
+            if (user.IsAdmin == 1)
+            {
+                Application.Current.MainPage = new AdminShell();
+            }
+            else
+            {
+                Application.Current.MainPage = new AppShell();
+            }
         }
     }
 }
