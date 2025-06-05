@@ -42,6 +42,7 @@ CREATE TABLE Products (
     Name TEXT NOT NULL,
     Description TEXT,
     CategoryId INTEGER,
+    ImagePath TEXT,
     FOREIGN KEY (CategoryId) REFERENCES Category(Id)
 );
 
@@ -187,7 +188,7 @@ CREATE TABLE PriceHistory (
             new Product { Name = "Kanafilee 1 kg", Description = "Jahutatud kanafilee", CategoryId = 6 },
             new Product { Name = "Kartul 1 kg", Description = "Värske kartul, 2024. aasta saak", CategoryId = 7 },
             new Product { Name = "Punased õunad 1 kg", Description = "\"Gala\" sort õunad", CategoryId = 7 },
-            new Product { Name = "Piimašokolaad 90g", Description = "Klassikaline piimašokolaad", CategoryId = 8 }
+            new Product { Name = "Piimašokolaad 90g", Description = "Klassikaline piimašokolaad", CategoryId = 8  }
         };
 
         var productPrices = new List<ProductPrice>
@@ -337,6 +338,25 @@ CREATE TABLE PriceHistory (
     public Task DeleteCategoryAsync(int categoryId)
     {
         return _connection.DeleteAsync<Category>(categoryId);
+    }
+    public async Task<List<User>> GetAllUsersAsync()
+    {
+        return await _connection.Table<User>().ToListAsync();
+    }
+
+    public async Task<int> AddUserAsync(User user)
+    {
+        return await _connection.InsertAsync(user);
+    }
+
+    public async Task<int> DeleteUserAsync(User user)
+    {
+        return await _connection.DeleteAsync(user);
+    }
+
+    public async Task<int> UpdateUserAsync(User user)
+    {
+        return await _connection.UpdateAsync(user);
     }
 
 

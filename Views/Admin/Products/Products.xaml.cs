@@ -1,8 +1,10 @@
-using HindApp.Models;
+﻿using HindApp.Models;
 using HindApp.Services;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +15,7 @@ namespace HindApp.Views.Admin
         private readonly DatabaseService _dbService;
         private List<Category> _categories;
         private Product _selectedProduct;
+        private string _imagePath;
 
         public ProductsPage(DatabaseService dbService)
         {
@@ -39,7 +42,7 @@ namespace HindApp.Views.Admin
 
             if (string.IsNullOrWhiteSpace(name) || categoryId == null)
             {
-                await DisplayAlert("Viga", "Sisesta nimi ja vali kategooria", "��");
+                await DisplayAlert("Viga", "Sisesta nimi ja vali kategooria", "OK");
                 return;
             }
 
@@ -48,6 +51,10 @@ namespace HindApp.Views.Admin
                 _selectedProduct.Name = name;
                 _selectedProduct.Description = desc;
                 _selectedProduct.CategoryId = categoryId;
+
+                if (!string.IsNullOrEmpty(_imagePath))
+                    _selectedProduct.ImagePath = _imagePath;
+
                 await _dbService.UpdateProductAsync(_selectedProduct);
             }
             else
@@ -56,7 +63,8 @@ namespace HindApp.Views.Admin
                 {
                     Name = name,
                     Description = desc,
-                    CategoryId = categoryId
+                    CategoryId = categoryId,
+                    ImagePath = _imagePath
                 };
                 await _dbService.AddProductAsync(newProduct);
             }
@@ -92,7 +100,24 @@ namespace HindApp.Views.Admin
                     var category = _categories.FirstOrDefault(c => c.Id == _selectedProduct.CategoryId.Value);
                     CategoryPicker.SelectedItem = category;
                 }
+
+                // Показываем изображение, если есть
+                if (!string.IsNullOrEmpty(_selectedProduct.ImagePath) && File.Exists(_selectedProduct.ImagePath))
+                {
+                    ProductImage.Source = ImageSource.FromFile(_selectedProduct.ImagePath);
+                    _imagePath = _selectedProduct.ImagePath;
+                }
+                else
+                {
+                    ProductImage.Source = null;
+                    _imagePath = null;
+                }
             }
+        }
+
+        private void OnClearClicked(object sender, EventArgs e)
+        {
+            ClearForm();
         }
 
         private void ClearForm()
@@ -102,11 +127,39 @@ namespace HindApp.Views.Admin
             DescriptionEntry.Text = "";
             CategoryPicker.SelectedItem = null;
             ProductsList.SelectedItem = null;
-        }
-        private void OnClearClicked(object sender, EventArgs e)
-        {
-            ClearForm();
+            ProductImage.Source = null;
+            _imagePath = null;
         }
 
+        private async void OnPickImageClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var result = await FilePicker.PickAsync(new PickOptions
+                {
+                    FileTypes = FilePickerFileType.Images,
+                    PickerTitle = "Vali pilt"
+                });
+
+                if (result != null)
+                {
+                    using var stream = await result.OpenReadAsync();
+                    using var memoryStream = new MemoryStream();
+                    await stream.CopyToAsync(memoryStream);
+                    var bytes = memoryStream.ToArray();
+
+                    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(result.FileName)}";
+                    var filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+                    File.WriteAllBytes(filePath, bytes);
+
+                    _imagePath = filePath;
+                    ProductImage.Source = ImageSource.FromFile(_imagePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Viga", $"Pildi valimine ebaõnnestus: {ex.Message}", "OK");
+            }
+        }
     }
 }

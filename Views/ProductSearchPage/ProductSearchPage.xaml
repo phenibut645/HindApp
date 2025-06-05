@@ -21,10 +21,26 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Stroke="Gray" StrokeThickness="1" Padding="10" Margin="5" BackgroundColor="Transparent">
-                        <Label Text="{Binding Name}" FontSize="16"/>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold"/>
+
+                            <Grid>
+                                <Image Source="{Binding ImagePath}" 
+                               HeightRequest="100" 
+                               WidthRequest="100"
+                               Aspect="AspectFit"
+                               IsVisible="{Binding HasImage}" />
+                                <Label Text="Pole pilti" 
+                               IsVisible="{Binding NoImage}" 
+                               TextColor="Gray"
+                               VerticalOptions="Center" 
+                               HorizontalOptions="Center"/>
+                            </Grid>
+                        </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>

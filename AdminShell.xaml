@@ -10,6 +10,7 @@
         <ShellContent Title="Kauplused" Icon="stores.png" ContentTemplate="{DataTemplate pages:StoresPage}" Route="stores" />
         <ShellContent Title="Tooted" Icon="products.png" ContentTemplate="{DataTemplate pages:ProductsPage}" Route="products" />
         <ShellContent Title="Kategooriad" Icon="categories.png" ContentTemplate="{DataTemplate pages:CategoriesPage}" Route="categories" />
+        <ShellContent Title="Kasutajad" Icon="users.png" ContentTemplate="{DataTemplate pages:UsersPage}" Route="users" />
         <ShellContent Title="Väljapääs" Icon="logout.png" ContentTemplate="{DataTemplate views:LogoutPage}" Route="logout" />
     </TabBar>
 </Shell>

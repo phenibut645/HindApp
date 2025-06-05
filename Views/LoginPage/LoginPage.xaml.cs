@@ -1,5 +1,6 @@
 ﻿using HindApp.Services;
 using Microsoft.Maui.Controls;
+using System.Threading.Tasks;
 
 namespace HindApp.Views
 {
@@ -8,6 +9,7 @@ namespace HindApp.Views
         private readonly DatabaseService _databaseService;
         private readonly SessionService _sessionService;
         private readonly IServiceProvider _services;
+        private readonly RegistrationPage _registrationPage;
 
         public LoginView(DatabaseService databaseService, SessionService sessionService, IServiceProvider services)
         {
@@ -15,6 +17,7 @@ namespace HindApp.Views
             _databaseService = databaseService;
             _sessionService = sessionService;
             _services = services;
+            _registrationPage = new RegistrationPage(databaseService, this, sessionService);
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
@@ -46,6 +49,11 @@ namespace HindApp.Views
             {
                 Application.Current.MainPage = new AppShell();
             }
+        }
+
+        private async void OnRegistration(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(_registrationPage);
         }
     }
 }

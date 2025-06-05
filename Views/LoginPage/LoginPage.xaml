@@ -12,5 +12,6 @@
         <Entry x:Name="PasswordEntry" Placeholder="Parool" IsPassword="True" />
 
         <Button Text="Sisene" Clicked="OnLoginClicked" />
+        <Button Text="Don't have a account?" Clicked="OnRegistration"/>
     </VerticalStackLayout>
 </ContentPage>

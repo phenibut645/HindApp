@@ -26,15 +26,16 @@ public partial class ProductSearchPage : ContentPage
         int? categoryId = selectedCategory?.Id;
 
         var results = await _searchService.SearchProductsAsync(query, limit, categoryId);
-        ProductsList.ItemsSource = results;
+        ProductsList.ItemsSource = results.Select(p => new ProductViewModel(p)).ToList();
+
     }
 
 
     private async void OnProductSelected(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is Product selectedProduct)
+        if (e.CurrentSelection.FirstOrDefault() is ProductViewModel selectedVm)
         {
-            _navigationDataService.SelectedProduct = selectedProduct;
+            _navigationDataService.SelectedProduct = selectedVm.OriginalProduct;
             try
             {
                 await Shell.Current.GoToAsync("ProductDetailsPage");
@@ -47,6 +48,7 @@ public partial class ProductSearchPage : ContentPage
         }
     }
 
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -55,3 +57,20 @@ public partial class ProductSearchPage : ContentPage
     }
 
 }
+public class ProductViewModel
+{
+    public string Name { get; set; }
+    public string ImagePath { get; set; }
+    public bool HasImage { get; set; }
+    public bool NoImage => !HasImage;
+    public Product OriginalProduct { get; set; }
+
+    public ProductViewModel(Product product)
+    {
+        Name = product.Name;
+        ImagePath = product.ImagePath;
+        HasImage = !string.IsNullOrWhiteSpace(product.ImagePath) && File.Exists(product.ImagePath);
+        OriginalProduct = product;
+    }
+}
+

@@ -8,11 +8,17 @@
         <Entry x:Name="NameEntry" Placeholder="Toote nimi" />
         <Entry x:Name="DescriptionEntry" Placeholder="Toote kirjeldus" />
         <Picker x:Name="CategoryPicker" Title="Valige kategooria" ItemDisplayBinding="{Binding Name}" />
+
+        <Image x:Name="ProductImage" HeightRequest="150" WidthRequest="150" />
+        <Button Text="Vali pilt" Clicked="OnPickImageClicked" />
+
         <Button Text="Salvesta" Clicked="OnSaveClicked" />
         <Button Text="Puhasta vorm" Clicked="OnClearClicked" />
 
-
-        <CollectionView x:Name="ProductsList" SelectionMode="Single" SelectionChanged="OnProductSelected">
+        <CollectionView x:Name="ProductsList"
+                        SelectionMode="Single"
+                        SelectionChanged="OnProductSelected"
+                        HeightRequest="300">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView>

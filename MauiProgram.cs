@@ -48,6 +48,7 @@ namespace HindApp
             builder.Services.AddTransient<StoreProductsPage>();
             builder.Services.AddTransient<CategoriesPage>();
             builder.Services.AddTransient<LogoutPage>();
+            builder.Services.AddTransient<UsersPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

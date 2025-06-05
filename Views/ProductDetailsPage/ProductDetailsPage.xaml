@@ -24,16 +24,18 @@
                 <DataTemplate>
                     <Frame Padding="10" Margin="5" BorderColor="LightGray">
                         <VerticalStackLayout>
-                            <Label Text="{Binding StoreName}" FontAttributes="Bold"/>
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding StoreName}" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Button Text="{Binding IsFavorite, Converter={StaticResource FavoriteTextConverter}}"
+                                        Clicked="OnAddToFavoritesClicked"
+                                        CommandParameter="{Binding .}"
+                                        IsEnabled="{Binding IsFavorite, Converter={StaticResource InverseBoolConverter}}"
+                                        VerticalOptions="Center"
+                                        Margin="10,0,0,0"/>
+                            </HorizontalStackLayout>
                             <Label Text="{Binding Price, StringFormat='Hind: {0} €'}"/>
                             <Label Text="{Binding LastUpdated, StringFormat='Uuendatud: {0:dd.MM.yyyy HH:mm}'}"
-                           FontSize="10" TextColor="Gray"/>
-
-                            <Button Text="{Binding IsFavorite, Converter={StaticResource FavoriteTextConverter}}"
-                            Clicked="OnAddToFavoritesClicked"
-                            CommandParameter="{Binding .}"
-                            IsEnabled="{Binding IsFavorite, Converter={StaticResource InverseBoolConverter}}"/>
-
+                                   FontSize="10" TextColor="Gray"/>
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>

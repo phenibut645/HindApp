@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HindApp.Views.Admin.UsersPage"
+             Title="UsersPage">
+    <VerticalStackLayout Padding="20">
+        <Label Text="Kasutajate nimekiri" FontSize="20" />
+
+        <CollectionView x:Name="UsersList" ItemsSource="{Binding Users}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="{Binding Username}" VerticalOptions="Center" />
+                        <Label Text="{Binding IsAdmin}" VerticalOptions="Center" />
+                        <Button Text="Kustuta" 
+                                Clicked="OnDeleteUser"
+                                CommandParameter="{Binding}" />
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Entry x:Name="UsernameEntry" Placeholder="Kasutaja nimi" />
+        <Entry x:Name="PasswordEntry" Placeholder="Salasona" IsPassword="True" />
+        <HorizontalStackLayout>
+            <Switch x:Name="IsAdminSwitch" />
+            <Label Text="Administraator" />
+        </HorizontalStackLayout>
+        <Button Text="Kasutaja lisamine" Clicked="OnAddUserClicked" />
+    </VerticalStackLayout>
+</ContentPage>
