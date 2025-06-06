@@ -22,16 +22,16 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItems>
-                                <SwipeItem Text="Kustuta" BackgroundColor="Red" Invoked="OnDeleteClicked" />
-                            </SwipeItems>
-                        </SwipeView.RightItems>
                         <Grid Padding="10">
-                            <VerticalStackLayout>
-                                <Label Text="{Binding Name}" FontAttributes="Bold"/>
-                                <Label Text="{Binding Description}" FontSize="12" TextColor="Gray"/>
-                            </VerticalStackLayout>
+                            <HorizontalStackLayout Spacing="10">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Description}" FontSize="12" TextColor="Gray"/>
+                                </VerticalStackLayout>
+                                
+                                <Button Text="Kustuta" BackgroundColor="Red" Clicked="OnDeleteClicked" />
+                            </HorizontalStackLayout>
+                            
                         </Grid>
                     </SwipeView>
                 </DataTemplate>

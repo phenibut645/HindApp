@@ -1,4 +1,4 @@
-using HindApp.Models;
+п»їusing HindApp.Models;
 
 namespace HindApp.Views;
 
@@ -23,7 +23,7 @@ public partial class RegistrationPage : ContentPage
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                StatusLabel.Text = "Все поля обязательны.";
+                StatusLabel.Text = "KГµik vГ¤ljad on kohustuslikud.";
                 return;
             }
 
@@ -34,7 +34,7 @@ public partial class RegistrationPage : ContentPage
 
             if (existingUser != null)
             {
-                StatusLabel.Text = "Пользователь уже существует.";
+                StatusLabel.Text = "Kasutaja on juba olemas.";
                 return;
             }
 
@@ -46,7 +46,7 @@ public partial class RegistrationPage : ContentPage
             };
 
             await _database.GetConnection().InsertAsync(newUser);
-            await DisplayAlert("Успех", "Пользователь зарегистрирован!", "OK");
+            await DisplayAlert("Edu", "Kasutaja registreeritud!", "OK");
             _sessionService.SetUser(newUser);
             Application.Current.MainPage = new AppShell();
         }
