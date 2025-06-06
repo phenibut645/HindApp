@@ -4,16 +4,16 @@
              x:Class="HindApp.Views.RegistrationPage"
              Title="RegistrationPage">
     <VerticalStackLayout Padding="20" Spacing="15">
-        <Label Text="Имя пользователя" />
-        <Entry x:Name="UsernameEntry" Placeholder="Введите имя" />
+        <Label Text="Kasutaja nimi" />
+        <Entry x:Name="UsernameEntry" Placeholder="Sisestage nimi" />
 
-        <Label Text="Пароль" />
-        <Entry x:Name="PasswordEntry" Placeholder="Введите пароль" IsPassword="True" />
+        <Label Text="Salasona" />
+        <Entry x:Name="PasswordEntry" Placeholder="Sisestage oma parool" IsPassword="True" />
 
-        <Button Text="Зарегистрироваться" Clicked="OnRegisterClicked" />
+        <Button Text="Registreeru" Clicked="OnRegisterClicked" />
 
         <Label x:Name="StatusLabel" TextColor="Red" />
 
-        <Button Text="Уже есть аккаунт? Войти" Clicked="OnLoginClicked" />
+        <Button Text="Kas teil on juba konto? Logi sisse" Clicked="OnLoginClicked" />
     </VerticalStackLayout>
 </ContentPage>
